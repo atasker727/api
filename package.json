@@ -1,0 +1,41 @@
+{
+  "name": "node-backend-test",
+  "private": true,
+  "version": "0.0.0",
+  "main": "/src/server.ts",
+  "scripts": {
+    "build": "rm -rf dist && tsc && cp -R ./src/db/migrations ./dist/db/migrations",
+    "dev": "nodemon src",
+    "start": "node dist/server.js",
+    "lint": "eslint src/**/*.ts && eslint src/**/*.ts",
+    "lint-fix": "prettier --write src/*.ts && prettier --write src/**/*.ts && eslint src/**/*.ts"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "exec": "tsc && node ./dist/server.js",
+    "ext": "ts,js,json"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.2.0",
+    "@types/pg": "^8.15.5",
+    "eslint": "^9.32.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "node-postgres": "^0.6.2",
+    "pg": "^8.16.3",
+    "postgres-migrations": "^5.3.0",
+    "ts-node": "^10.9.2"
+  }
+}

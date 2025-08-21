@@ -16,8 +16,8 @@ const PORT = process.env.API_PORT || 3000;
 
 // const apiURL = (url: string) => `${API_PREFIX}/${url}`;
 
-app.use((_req: Request, _res: Response, next: NextFunction) => {
-  console.log('middle');
+app.use((req: Request, _res: Response, next: NextFunction) => {
+  console.log(new Date().toLocaleString().split(',')[1], req.method, req.url);
   next();
 });
 

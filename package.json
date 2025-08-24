@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "main": "/src/server.ts",
   "scripts": {
-    "build": "rm -rf dist && tsc && cp -R ./src/db/migrations ./dist/db/migrations",
-    "dev": "nodemon src",
+    "build": "rm -rf dist && tsc",
+    "dev": "nodemon",
     "start": "node dist/server.js",
     "lint": "eslint src/**/*.ts && eslint src/**/*.ts",
     "lint-fix": "prettier --write src/*.ts && prettier --write src/**/*.ts && eslint src/**/*.ts"
@@ -30,7 +30,6 @@
     "typescript-eslint": "^8.39.0"
   },
   "dependencies": {
-    "common-files": "link:../common",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",

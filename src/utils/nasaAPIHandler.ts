@@ -1,8 +1,6 @@
 import { Response } from 'express';
-// import { cancellableRequestType } from './cancellable-requests.d';
-import { cancellableRequestGetClass } from './cancellable-requests';
-
-import { type PhotoOfTheDayResponse, type PhotoOfTheDay } from 'common-files';
+import { type PhotoOfTheDayResponse, type PhotoOfTheDay } from '../common/types/photoOfTheDay';
+import { cancellableRequestGet, getFullURLWithParams } from '../common/utils/requestsCore';
 
 const ROOT_URL = 'https://api.nasa.gov';
 
@@ -22,12 +20,7 @@ export default class NasaAPIHandler {
 
   // move to common utils
   _getURL = (endpoint, options = {}): string => {
-    const url = new URL(endpoint, ROOT_URL);
-
-    for (const [key, value] of Object.entries(options)) {
-      url.searchParams.append(key, String(value));
-    }
-    return url.href;
+    return getFullURLWithParams(ROOT_URL + endpoint, options);
   };
 
   _logRateLimitHeaders = (res: Response): Response => {
@@ -66,7 +59,8 @@ export default class NasaAPIHandler {
     copyright: POTD.copyright,
   });
 
-  getPhotoOfTheDay = (query?: PhotoOfTheDayQuery): cancellableRequestGetClass | Promise<unknown> => {
+  getPhotoOfTheDay = (query?: PhotoOfTheDayQuery): Promise<unknown> => {
+    // getPhotoOfTheDay = (query?: PhotoOfTheDayQuery): cancellableRequestClassType | Promise<unknown> => {
     try {
       // validate query parameters are each YYYY-MM-DD format
       // validation doesn't check for other invalid params
@@ -75,7 +69,8 @@ export default class NasaAPIHandler {
       }
 
       const url = this._getURL('/planetary/apod', { api_key: API_KEY, ...query });
-      const photosRequest = new cancellableRequestGetClass(url);
+
+      const photosRequest = cancellableRequestGet(url);
 
       photosRequest.catch((err) => {
         console.error('Error fetching Photo of the Day:', err);

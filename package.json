@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc",
     "dev": "nodemon",
-    "start": "node dist/server.js",
+    "start": "node ./dist/server.js",
     "lint": "eslint src/**/*.ts && eslint src/**/*.ts",
     "lint-fix": "prettier --write src/*.ts && prettier --write src/**/*.ts && eslint src/**/*.ts"
   },

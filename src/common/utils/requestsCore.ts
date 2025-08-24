@@ -124,20 +124,20 @@ class CancellableRequestClass implements cancellableRequestClassType {
 function cancellableRequestGet(
   url: string,
   params = {},
-): CancellableRequestClass {
+): cancellableRequestClassType {
   return new CancellableRequestClass(addURLParams(url, params), "GET", null);
 }
 
 function cancellableRequestPost(
   url: string,
   requestBody = {},
-): CancellableRequestClass {
+): cancellableRequestClassType {
   return new CancellableRequestClass(url, "POST", requestBody);
 }
 
 function cancellableRequestDelete(
   url: string,
   requestBody = {},
-): CancellableRequestClass {
+): cancellableRequestClassType {
   return new CancellableRequestClass(url, "DELETE", requestBody);
 }

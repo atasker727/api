@@ -34,4 +34,18 @@ router.get('/photo-of-the-day', (req, res) => {
     });
 });
 
+router.get('/mars-photos', (_req, res) => {
+  nasaAPIHandler
+    .getMarsPhotos()
+    // .getMarsPhotos(req.query)
+    .then((photos) => {
+      res.status(200).send({ photos });
+    })
+    .catch((err) => {
+      console.log('expected');
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
 export default router;

@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { type PhotoOfTheDayResponse, type PhotoOfTheDay } from '../common/types/photoOfTheDay';
+import type { PhotoOfTheDayResponse, PhotoOfTheDay, MarsPhoto, MarsPhotoResponse } from '../common/types/photoTypes';
 import { cancellableRequestGet, getFullURLWithParams } from '../common/utils/requestsCore';
 
 const ROOT_URL = 'https://api.nasa.gov';
@@ -20,7 +20,7 @@ export default class NasaAPIHandler {
 
   // move to common utils
   _getURL = (endpoint, options = {}): string => {
-    return getFullURLWithParams(ROOT_URL + endpoint, options);
+    return getFullURLWithParams(ROOT_URL + endpoint, { api_key: API_KEY, ...options });
   };
 
   _logRateLimitHeaders = (res: Response): Response => {
@@ -68,7 +68,7 @@ export default class NasaAPIHandler {
         return Promise.reject('Invalid query parameters');
       }
 
-      const url = this._getURL('/planetary/apod', { api_key: API_KEY, ...query });
+      const url = this._getURL('/planetary/apod', query);
 
       const photosRequest = cancellableRequestGet(url);
 
@@ -92,4 +92,35 @@ export default class NasaAPIHandler {
       return Promise.reject(err);
     }
   };
+
+  _transformMarsPhotoResponse = (photo: MarsPhotoResponse): MarsPhoto => ({
+    title: `${photo.rover.name} - ${photo.camera.name} | ${photo.earth_date}`,
+    date: photo.earth_date,
+    id: photo.id,
+    sol: photo.sol,
+    imageURL: photo.img_src,
+  });
+
+  getMarsPhotos() {
+    const query = {
+      sol: 1000,
+      camera: 'fhaz',
+    };
+    const url = this._getURL('/mars-photos/api/v1/rovers/curiosity/photos', query);
+
+    const photosRequest = cancellableRequestGet(url);
+
+    photosRequest.catch((err) => {
+      console.error('Error fetching Photo of the Day:', err);
+    });
+
+    return photosRequest.then((response): MarsPhoto[] | [] => {
+      let photos: MarsPhoto[] | [] = [];
+      const marsResponse = response as { photos: MarsPhotoResponse[] | []};
+      if (marsResponse?.photos) {
+        photos = marsResponse.photos.map(this._transformMarsPhotoResponse);
+      }
+      return photos;
+    });
+  }
 }

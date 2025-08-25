@@ -22,7 +22,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 });
 
 app.use('/api', apiRoutes);
-app.get("/", (_req, res) => res.send("Express on Vercel"));
+app.get('/', (_req, res) => res.send('hit backend'));
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

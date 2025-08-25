@@ -116,7 +116,7 @@ export default class NasaAPIHandler {
 
     return photosRequest.then((response): MarsPhoto[] | [] => {
       let photos: MarsPhoto[] | [] = [];
-      const marsResponse = response as { photos: MarsPhotoResponse[] | []};
+      const marsResponse = response as { photos: MarsPhotoResponse[] | [] };
       if (marsResponse?.photos) {
         photos = marsResponse.photos.map(this._transformMarsPhotoResponse);
       }

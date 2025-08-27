@@ -1,6 +1,7 @@
 export interface PhotoGeneric {
   imageURL: string;
   title: string;
+  id: string | number;
 }
 
 export interface PhotoOfTheDayResponse {
@@ -52,3 +53,12 @@ export interface MarsPhoto extends PhotoGeneric {
 }
 
 export type ALLOWED_PHOTO_TYPES = "MarsPhotos" | "POTD";
+
+export type ALLOWED_CAMERA_TYPES =
+  | "FHAZ"
+  | "RHAZ"
+  | "MAST"
+  | "CHEMCAM"
+  | "MAHLI"
+  | "MARDI"
+  | "NAVCAM";

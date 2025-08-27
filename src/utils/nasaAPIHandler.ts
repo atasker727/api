@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import type { PhotoOfTheDayResponse, PhotoOfTheDay, MarsPhoto, MarsPhotoResponse } from '../common/types/photoTypes';
+import type { PhotoOfTheDayResponse, PhotoOfTheDay, MarsPhoto, MarsPhotoResponse, ALLOWED_CAMERA_TYPES } from '../common/types/photoTypes';
 import { cancellableRequestGet, getFullURLWithParams } from '../common/utils/requestsCore';
 
 const ROOT_URL = 'https://api.nasa.gov';
@@ -51,6 +51,7 @@ export default class NasaAPIHandler {
   }
 
   _transformPOTDResponse = (POTD: PhotoOfTheDayResponse): PhotoOfTheDay => ({
+    id: POTD.date,
     title: POTD.title,
     explanation: POTD.explanation,
     date: POTD.date,
@@ -101,10 +102,16 @@ export default class NasaAPIHandler {
     imageURL: photo.img_src,
   });
 
-  getMarsPhotos() {
+  getMarsPhotos(queryParams?: { sol?: string | number; camera?: ALLOWED_CAMERA_TYPES }) {
+    const sol = queryParams?.sol ?? 1000;
+    const cameraRaw = (queryParams?.camera || 'FHAZ').toString().toUpperCase() as ALLOWED_CAMERA_TYPES;
+
+    const allowed: ALLOWED_CAMERA_TYPES[] = ['FHAZ', 'RHAZ', 'MAST', 'CHEMCAM', 'MAHLI', 'MARDI', 'NAVCAM'];
+    const camera: ALLOWED_CAMERA_TYPES = allowed.includes(cameraRaw) ? cameraRaw : 'FHAZ';
+
     const query = {
-      sol: 1000,
-      camera: 'fhaz',
+      sol,
+      camera,
     };
     const url = this._getURL('/mars-photos/api/v1/rovers/curiosity/photos', query);
 

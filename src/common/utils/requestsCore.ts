@@ -14,7 +14,6 @@ export {
 async function _handleRequestCodes(res: Response) {
   if (!res.ok) {
     // error handling for codes like 503 here
-    console.log(res);
     return Promise.reject(new Error("bad response"));
   }
 

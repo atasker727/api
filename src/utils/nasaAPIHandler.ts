@@ -1,5 +1,10 @@
-import { Response } from 'express';
-import type { PhotoOfTheDayResponse, PhotoOfTheDay, MarsPhoto, MarsPhotoResponse, ALLOWED_CAMERA_TYPES } from '../common/types/photoTypes';
+import type {
+  PhotoOfTheDayResponse,
+  PhotoOfTheDay,
+  MarsPhoto,
+  MarsPhotoResponse,
+  ALLOWED_CAMERA_TYPES,
+} from '../common/types/photoTypes';
 import { cancellableRequestGet, getFullURLWithParams } from '../common/utils/requestsCore';
 
 const ROOT_URL = 'https://api.nasa.gov';
@@ -18,18 +23,9 @@ export default class NasaAPIHandler {
     }
   }
 
-  // move to common utils
   _getURL = (endpoint, options = {}): string => {
     return getFullURLWithParams(ROOT_URL + endpoint, { api_key: API_KEY, ...options });
   };
-
-  _logRateLimitHeaders = (res: Response): Response => {
-    console.log(
-      `Rate Limit Headers: X-RateLimit-Limit=${res.getHeader('X-RateLimit-Limit')}, X-RateLimit-Remaining=${res.getHeader('X-RateLimit-Remaining')}`,
-    );
-    return res;
-  };
-
   verifyDate(date: string): boolean {
     return /^\d{4}-\d{2}-\d{2}$/.test(date);
   }
@@ -61,10 +57,7 @@ export default class NasaAPIHandler {
   });
 
   getPhotoOfTheDay = (query?: PhotoOfTheDayQuery): Promise<unknown> => {
-    // getPhotoOfTheDay = (query?: PhotoOfTheDayQuery): cancellableRequestClassType | Promise<unknown> => {
     try {
-      // validate query parameters are each YYYY-MM-DD format
-      // validation doesn't check for other invalid params
       if (query && !this.validatePOTDParams(query)) {
         return Promise.reject('Invalid query parameters');
       }

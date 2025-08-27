@@ -12,10 +12,6 @@ app.use(express.json());
 
 const PORT = process.env.API_PORT || 3000;
 
-// const API_PREFIX = process.env.API_PREFIX || '/api';
-
-// const apiURL = (url: string) => `${API_PREFIX}/${url}`;
-
 app.use((req: Request, _res: Response, next: NextFunction) => {
   console.log(new Date().toLocaleString().split(',')[1], req.method, req.url);
   next();
